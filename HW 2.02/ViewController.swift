@@ -14,17 +14,24 @@ class ViewController: UIViewController {
     @IBOutlet weak var greenLightView: UIView!
     @IBOutlet weak var startButton: UIButton!
     
-    private var viewColor: ColorView = .red
+    private var viewColor: ColorView!
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        roundCornersOfView()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        roundCornersOfView()
         startButton.layer.cornerRadius = 14
     }
     
     
     @IBAction func startButtonTapped() {
-        startButton.setTitle("NEXT", for: .normal)
+        if startButton.titleLabel?.text == "START" {
+            startButton.setTitle("NEXT", for: .normal)
+            viewColor = .red
+        }
+        // startButton.setTitle("NEXT", for: .normal)
         switch viewColor {
         case .red:
             greenLightView.alpha = 0.3
@@ -38,12 +45,12 @@ class ViewController: UIViewController {
             yellowLightView.alpha = 0.3
             greenLightView.alpha = 1
             viewColor = .red
+        default:
+            return
         }
     }
     
-    private enum ColorView {
-        case red, yellow, green
-    }
+    
     
     private func roundCornersOfView() {
         let radiusOfCorner = redLightView.bounds.width / 2
@@ -52,8 +59,10 @@ class ViewController: UIViewController {
         greenLightView.layer.cornerRadius = radiusOfCorner
     }
     
-    
-
-
 }
 
+extension ViewController {
+    private enum ColorView {
+        case red, yellow, green
+    }
+}
